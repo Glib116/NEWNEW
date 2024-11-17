@@ -1,16 +1,17 @@
 from random import choice, shuffle
 from time import sleep
-from PyQt5.QTWidgets import QApplication
+from PyQt5.QtWidgets import QApplication
+import memo_qss
 
 app = QApplication([])
+app.setStyleSheet(memo_qss.style_sheet)
 
 
-from menu_window import *
+from memo_menu import *
 from memo_card_layout import *
 
-
 class Question:
-    def __init__(self, question, answer, wrong_answer1, wrong_answer2, wrong_answer3)
+    def __init__(self, question, answer, wrong_answer1, wrong_answer2, wrong_answer3):
         self.question = question
         self.answer = answer
         self.wrong_answer1 = wrong_answer1
@@ -21,12 +22,12 @@ class Question:
         self.count_right = 0
     def got_right(self):
         self.count_ask += 1
-        self.count_right +=1
+        self.count_right += 1 
     def got_wrong(self):
-        self.count_ask +=1
+        self.count_ask += 1
 
 
-radio_buttons = [rb_ans1,rb_ans2,rb_ans3,rb_ans4]
+radio_buttons = [rb_ans1, rb_ans2, rb_ans3, rb_ans4]
 q1 = Question("Хто створив Пайтон?", "Гвідо Ван Россум", "Егор Ліс","Стів Джобс", "Черін Тімур")
 q2 = Question("У якому році Титанік затонув в Атлантичному океані 15 квітня, в дівочому плаванні з Саутгемптона??", "2021", "3212","1929", "1912")
 q3 = Question("Який метал був відкритий Гансом Крістіаном Ерстедом у 1825 році?", "залізо","золото", "алюміній","алмаз")
@@ -37,14 +38,25 @@ q7 = Question("Яка найменша у світі птах?", "Бджола �
 q8 = Question("Яка тривалість життя бабки?", "24 год", "2 роки","100 год", "милиард років")
 q9 = Question("Хто грав «Боді» та «Дойла» в «Професіоналах»?", "Льюїс Коллінз та Мартін Шоу", "я","Джон Сіна", "Черін Тімур")
 q10 = Question("Хто винайшов консервну банку для консервування їжі в 1810 році?", "Пітер Дуранд", "Егор Ліс","я", "Кирюха")
-questions = [q1,q2,q3,q4,q5,q6,q7,q8,q9,q10]
-def new_questions():
+q11 = Question("Які конфети смачніші", "Клубничний смак","я", "ти","баунті")
+q12 = Question("Хто придумав дз?Паскуда така...", "Хорас Манн", "математичка","рандомний чувак", "Роберт Дауні младший")
+q13 = Question("Хто найкращий в нашій групі?", "я", "Олена","Єгорчичунічек", "Точно не ти")
+q14 = Question("Ти побачив  як б'ють квадробера.Твої дії?", "Приєднатися", "Побігти","Потанцювать", "Зробити інтерв'ю з чуваками")
+q15 = Question("Скільки будуть длитися наступні літні канікули?", "Та нормальна швидкість", "Зі швидкістю світла","Дуже багато", "Три місяці")
+questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15]
+def new_question():
     global cur_q
     cur_q = choice(questions)
-    lb_questions.setText(cur_q.questions)
+    lb_question.setText(cur_q.question)
     lb_right_answer.setText(cur_q.answer)
-
-new_questions()
+    shuffle(radio_buttons)
+    
+    radio_buttons[0].setText(cur_q.wrong_answer1)
+    radio_buttons[1].setText(cur_q.wrong_answer2)
+    radio_buttons[2].setText(cur_q.wrong_answer3)
+    radio_buttons[3].setText(cur_q.answer)
+    
+new_question()
 
 
 def check():
@@ -53,33 +65,33 @@ def check():
         if answer.isChecked():
             if answer.text() == lb_right_answer.text():
                 cur_q.got_right()
-                lb_result.setText("Вірно")
-                answer.setchecked(False)
+                lb_result.setText("Вірно!")
+                answer.setChecked(False)
                 break
     else:
-        lb_result.setText('Не вірно!')
+        lb_result.setText("Невірно!")
         cur_q.got_wrong()
+        
+    RadioGroup.setExclusive(True)
 
-    RadioGroup.setText(True)
 
 
 def click_ok():
-    if btn_next.text()== 'Відповісти':
+    if btn_next.text() == "Відповісти":
         check()
         gb_question.hide()
         gb_answer.show()
-
-        btn_next.setText("Наступне питання")
+        
+        btn_next.setText("Наступне запитання")
     else:
-        new_question.hide()
-        gb_answer.show()
+        new_question()
+        gb_question.show()
         gb_answer.hide()
-
-        btn_next.setText("Відповіти")
+        
+        btn_next.setText("Відповісти")
 
 
 btn_next.clicked.connect(click_ok)
-
 
 def rest():
     window.hide()
@@ -95,24 +107,42 @@ def menu_generation():
         c = 0
     else:
         c = (cur_q.count_right/cur_q.count_ask)*100
-
-    text = f'Разів відповили:{cur_q.count_ask}/n' / 
-           f'вірних відповідей:{cur_q.count_ask}/n' / 
-           f'Успішність: {round(c, 2)}%'
+    
+    text = f"Разів відповіли: {cur_q.count_ask}\n" \
+        f"Вірних відповідей: {cur_q.count_ask}\n" \
+            f"Успішність: {round(c, 2)}%"
     lb_statistic.setText(text)
     menu_win.show()
     window.hide()
-
+    
 btn_menu.clicked.connect(menu_generation)
 
 def back_menu():
     menu_win.hide()
     window.show()
-
+    
 btn_back.clicked.connect(back_menu)
 
 def clear():
     le_question.clear()
+    le_right_ans.clear()
+    le_wrong_ans1.clear()
+    le_wrong_ans2.clear()
+    le_wrong_ans3.clear()
+    
+btn_clear.clicked.connect(clear)
 
 
-             
+def add_question():
+    new_q = Question(le_question.text(), le_right_ans.text(),
+                     le_wrong_ans1.text(), le_wrong_ans2.text(),
+                     le_wrong_ans3.text())
+    
+    questions.append(new_q)
+    clear()
+
+btn_add_question.clicked.connect(add_question)
+# новий код
+
+window.show()
+app.exec_()
