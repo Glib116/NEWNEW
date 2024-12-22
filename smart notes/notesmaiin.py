@@ -5,8 +5,60 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel,
                              QFormLayout, QLineEdit, QTextEdit)
 
 app = QApplication([])
-
-
+app.setStyleSheet('
+                  Qwidget {
+                    background-color: gray;
+                  }
+                  QPushbutton {
+                  background-color: black;
+                  border: 1 px solid black;
+                  color: white;
+                  bordor-radius: 10px;
+                  font-family: Montserrat;
+                  font-size: 20px;
+                  font-weight: bold
+                  }
+                  QInputDialog {
+                  background-color: white;
+                  border: 3 px solid black;
+                  color: white;
+                  font-family: Montserrat;
+                  font-size: 16px;
+                  bordor-radius: 10px;
+                  }
+                  QLabel {
+                  border: 3 px solid black;
+                  color: black;
+                  font-family: Montserrat;
+                  font-size: 20px;
+                  }
+                  QListWidget {
+                  background-color: white;
+                  border: 3 px solid black;
+                  color: black;
+                  font-family: Montserrat;
+                  font-size: 16px;
+                  bordor-radius: 10px;
+                  font-weight: bold
+                  }
+                  QLineEdit {
+                  background-color: white;
+                  border: 1 px solid black;
+                  color: black;
+                  font-family: Montserrat;
+                  font-size: 16px;
+                  bordor-radius: 10px;
+                  }
+                  QTextEdit {
+                  background-color: white;
+                  border: 3 px solid black;
+                  color: black;
+                  font-family: Montserrat;
+                  font-size: 22px;
+                  bordor-radius: 10px;
+                  font-weight: bold
+                  }
+                  ')
 notes = []
 
 notes_win = QWidget()
