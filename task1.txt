@@ -1,0 +1,21 @@
+def marks():
+    grades = []
+    print("Введіть оцінки студентів:")
+    
+    while True:
+        grade = int(input())
+        if grade == 0:
+            break
+        if grade in [2, 3, 4, 5]:
+            grades.append(grade)
+    
+    if len(grades) > 0:
+        marks_count = 0
+        for grade in grades:
+            if grade in [3, 4, 5]:
+                marks_count += 1
+        marks_rate = (marks_count / len(grades)) * 100
+        print("Успішність студентів:"+marks_rate)
+    else:
+        print("Оцінки не були введені.")
+
